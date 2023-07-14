@@ -77,12 +77,8 @@ def get_filtered_df(data_path: str, save=True, max_rows=None) -> pd.DataFrame:
     filtered_df['json_data'] = filtered_df['full_address'].swifter.apply(convert_address_to_json)
 
     # Add a column for each component of the address data from the json
-    filtered_df = pd.concat([filtered_df, filtered_df['json_data'].swifter.apply(get_address_data).apply(pd.Series)],
+    filtered_df = pd.concat([filtered_df, filtered_df['json_data'].apply(get_address_data).apply(pd.Series)],
                             axis=1)
-
-    # drop unnecessary columns
-    filtered_df.drop(columns=['subpremise', 'subpremise_inferred', 'point_of_interest', 'point_of_interest_inferred'],
-                     inplace=True)
 
     if save:
         filtered_df.to_csv('addresses', index=False)
@@ -111,10 +107,10 @@ def generate_report(df_for_report: pd.DataFrame) -> None:
     plt.show()
 
 
-api_key = 'AIzaSyBm32aJxJ2Glizkf1LBpl00e363dKZ-C0Q'
+api_key = '' # Replace with your API key
 url = "https://addressvalidation.googleapis.com/v1:validateAddress?key="
 query = url + api_key
-path = r"C:\Users\shtey\Downloads\EpicData.xlsx"
+path = r"" # Replace with your path to the data (must be unlocked)
 
 df = get_filtered_df(path, max_rows=1000) # Delete max_rows to run on the entire dataset
 generate_report(df)
