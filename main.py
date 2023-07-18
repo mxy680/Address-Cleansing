@@ -61,17 +61,17 @@ def get_filtered_df(data_path: str, save=True, max_rows=None) -> pd.DataFrame:
         filtered_df = pd.read_excel(data_path, nrows=max_rows)
 
     # Drop na values
-    filtered_df.dropna(subset=['BILLTOSTATE', 'BILLTOZIPCODE'], inplace=True)
+    filtered_df.dropna(subset=['''INSERT STATE COLUMN''', '''INSERT ZIP CODE COLUMN'''], inplace=True)
 
     # Some of the columns contain the address, other are NaN. Combine the addresses into one column.
-    address_columns = ['ADDRESS1', 'ADDRESS2', 'BILLTOADDRESS1', 'BILLTOADDRESS2']
-    city_columns = ['BILLTOCITY', 'CITY']
+    address_columns = ['''INSERT COLUMN NAMES''']
+    city_columns = ['''INSERT CITY COLUMN NAMES''']
     # Find the columns that contain the address
     address_column = [column for column in address_columns if column in filtered_df.columns][0]
     city_column = [column for column in city_columns if column in filtered_df.columns][0]
     # Combine the address columns into one column
     filtered_df['full_address'] = filtered_df[address_column] + ', ' + filtered_df[city_column] + ', ' + filtered_df[
-        'BILLTOSTATE'] + ' ' + filtered_df['BILLTOZIPCODE'].astype(str)
+        '''INSERT STATE COLUMN'''] + ' ' + filtered_df['''INSERT ZIP CODE COLUMN'''].astype(str)
 
     # Add a column to df that displays the json data
     filtered_df['json_data'] = filtered_df['full_address'].swifter.apply(convert_address_to_json)
@@ -112,5 +112,5 @@ url = "https://addressvalidation.googleapis.com/v1:validateAddress?key="
 query = url + api_key
 path = r"" # Replace with your path to the data (must be unlocked)
 
-df = get_filtered_df(path, max_rows=1000) # Delete max_rows to run on the entire dataset
+df = get_filtered_df(path) # Delete max_rows to run on the entire dataset
 generate_report(df)
